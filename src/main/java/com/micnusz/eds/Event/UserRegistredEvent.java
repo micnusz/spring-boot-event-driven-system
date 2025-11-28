@@ -1,4 +1,4 @@
-package com.micnusz.eds.Event;
+package com.micnusz.eds.event;
 
 import java.time.Instant;
 import java.util.UUID;
