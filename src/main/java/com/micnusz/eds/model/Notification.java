@@ -7,21 +7,24 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "notifications")
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class Notification {
     
     @Id
     @GeneratedValue(generator="uuid2")
-    @Column(columnDefinition="Binary(16)")
+    @Column(columnDefinition="BINARY(16)")
     private UUID id;
 
     @Column(nullable=false)
@@ -30,9 +33,14 @@ public class Notification {
     @Column(nullable=false)
     private String message;
 
-    @Column(nullable = false)
+    @Column(nullable=false)
     private boolean read = false;
 
     @Column(nullable = false, updatable = false)
-    private Instant sentAt = Instant.now();
+    private Instant sentAt;
+
+    @PrePersist
+    public void prePersist() {
+        this.sentAt = Instant.now();
+    }
 }

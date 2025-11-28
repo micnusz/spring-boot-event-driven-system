@@ -12,6 +12,7 @@ import com.micnusz.eds.mapper.NotificationMapper;
 import com.micnusz.eds.model.Notification;
 import com.micnusz.eds.repository.NotificationRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -20,7 +21,8 @@ public class NotificationService {
 
     private final NotificationRepository notificationRepository;
     private final NotificationMapper notificationMapper;
-
+    
+    @Transactional
     public NotificationResponse createNotification(NotificationRequest request) {
         Notification saved = notificationRepository.save(notificationMapper.toEntity(request));
         return notificationMapper.toResponse(saved);
