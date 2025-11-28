@@ -2,6 +2,7 @@ package com.micnusz.eds.service;
 
 import java.util.UUID;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.micnusz.eds.dto.user.UserRequest;
@@ -18,6 +19,7 @@ public class UserService {
     
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
 
     public UserResponse createUser(UserRequest request) {
@@ -25,7 +27,10 @@ public class UserService {
             throw new IllegalArgumentException("Email already exists");
         }
 
-        User saved = userRepository.save(userMapper.toEntity(request));
+        User userEntity = userMapper.toEntity(request);
+        userEntity.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        User saved = userRepository.save(userEntity);
         return userMapper.toResponse(saved);
     }
 
